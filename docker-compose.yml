@@ -1,0 +1,36 @@
+version: "3.9"
+services:
+  web:
+    build: .
+    image: "backend"
+    ports:
+      - 8000:80
+    depends_on:
+      - db
+    volumes:
+      - ./src/:/var/www/html
+  db:
+    image: mysql
+    container_name: "db"
+    ports:
+      - 8001:3306
+    restart: always
+    volumes:
+      - db-volume:/var/lib/mysql
+    environment: 
+      MYSQL_ROOT_PASSWORD: 123 
+      MYSQL_DATABASE: DB1 
+      MYSQL_USER: monta 
+      MYSQL_PASSWORD: 123
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: "phpmyadmin"
+    ports:
+      - 8002:80
+    restart: always
+    environment: 
+      - PMA_HOST:db
+    depends_on:
+      - db
+volumes:
+  db-volume :
